@@ -5,7 +5,8 @@ import habit_tracker_api.domain.model.Habit;
 
 public interface HabitService {
 
-    Habit findById(Long id);
+    Habit findById(Long idUser, Long idHabit);
     Habit create(Long idUser, Habit HabitToCreate);
-    Habit completeHabit(Long idHabit);
+    Habit completeHabit(Long idUser, Long idHabit);
+    void delete(Long idUser, Long idHabit);
 }

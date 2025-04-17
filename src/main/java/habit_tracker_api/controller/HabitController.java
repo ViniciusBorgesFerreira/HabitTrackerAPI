@@ -20,8 +20,8 @@ public class HabitController {
     }
 
     @GetMapping("/{idHabit}")
-    public ResponseEntity<Habit> findById(@PathVariable Long idHabit){
-        var habit = habitService.findById(idHabit);
+    public ResponseEntity<Habit> findById(@PathVariable Long idUser, @PathVariable Long idHabit){
+        var habit = habitService.findById(idUser, idHabit);
         return ResponseEntity.ok(habit);
     };
 
@@ -34,10 +34,16 @@ public class HabitController {
                 .toUri();
         return ResponseEntity.created(location).body(habitCreated);
     };
-    @PostMapping("habits/{idHabit}/complete")
-    public ResponseEntity<Habit> completeHabit(@PathVariable Long idHabit){
-        Habit updatedHabit = habitService.completeHabit(idHabit);
+    @PostMapping("/{idHabit}/complete")
+    public ResponseEntity<Habit> completeHabit(@PathVariable Long idHabit, @PathVariable Long idUser){
+        Habit updatedHabit = habitService.completeHabit(idUser, idHabit);
         return ResponseEntity.ok(updatedHabit);
     }
+
+    @DeleteMapping("/{idHabit}")
+    public ResponseEntity<Void> deleteHabit(@PathVariable Long idUser, @PathVariable Long idHabit){
+        habitService.delete(idUser, idHabit);
+        return ResponseEntity.noContent().build();
+    };
 
 }

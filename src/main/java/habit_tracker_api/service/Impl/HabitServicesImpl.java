@@ -24,8 +24,16 @@ public class HabitServicesImpl implements HabitService {
     }
 
     @Override
-    public Habit findById(Long id) {
-        return habitRepository.findById(id).orElseThrow(NoSuchElementException::new);
+    public Habit findById(Long idUser, Long idHabit) {
+
+
+        Habit habit = habitRepository.findById(idHabit)
+                .orElseThrow(NoSuchElementException::new);
+
+        if(!habit.getIdUser().equals(idUser)){
+            throw new IllegalArgumentException("Este hábito não pertence ao usuario informado");
+        };
+        return habitRepository.findById(idHabit).orElseThrow(NoSuchElementException::new);
     }
 
     @Transactional
@@ -45,13 +53,33 @@ public class HabitServicesImpl implements HabitService {
     }
 
     @Transactional
-    public Habit completeHabit(Long idHabit) {
+    public Habit completeHabit(Long idHabit, Long idUser) {
+
         Habit habit = habitRepository.findById(idHabit)
                 .orElseThrow(NoSuchElementException::new);
+
+        if(!habit.getIdUser().equals(idUser)){
+            throw new IllegalArgumentException("Este hábito não pertence ao usuario informado");
+        };
 
         habit.setConcluido();
         return habitRepository.save(habit);
 
     }
+
+    @Transactional
+    public void delete(Long idUser, Long idHabit){
+        Habit habit = habitRepository.findById(idHabit)
+                .orElseThrow(() -> new NoSuchElementException("Hábito não encontrado!"));
+
+        if(!habit.getIdUser().equals(idUser)){
+            throw new IllegalArgumentException("Este hábito não pertence ao usuario informado");
+        };
+
+        habitRepository.deleteById(idHabit);
+    }
+
+
+
 }
 
